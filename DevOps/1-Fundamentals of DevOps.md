@@ -230,34 +230,9 @@ If asked, you can mention:
 * Containers: Kubernetes
 * Config Management: Ansible
 * Infra as Code: Terraform
-
 ---
 
-## 12. What to Do After Day 1 (Instructions)
-
-1. Google “What is DevOps”
-2. Read blogs and compare definitions
-3. Notice recurring themes:
-
-   * Automation
-   * Quality
-   * Monitoring
-   * Testing
-4. Post questions or insights in comments
-5. Prepare a **clean, honest DevOps introduction**
-
----
-
-## 13. What’s Coming Next (Day 2 Preview)
-
-* Software Development Life Cycle (SDLC)
-* Role of DevOps in SDLC
-* Recap of Day 1
-* Answering viewer questions
-
----
-
-## 14. Key Takeaways
+## 12. Key Takeaways
 
 * DevOps is a **culture**, not a tool
 * Goal: **Faster, reliable delivery**

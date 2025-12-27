@@ -2,7 +2,7 @@
 
 ---
 
-## 1. Session Overview and Learning Objectives
+## 1. Overview and Learning Objectives
 
 * What is a **server**
 * Difference between **physical servers** and **virtual machines**
