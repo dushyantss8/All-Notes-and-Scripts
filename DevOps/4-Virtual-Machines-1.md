@@ -15,7 +15,7 @@
 
 ## 2. Core DevOps Philosophy: Efficiency
 
-A recurring theme throughout the session is:
+A recurring theme throughout the tutorial is:
 
 > **DevOps is all about improving efficiency.**
 

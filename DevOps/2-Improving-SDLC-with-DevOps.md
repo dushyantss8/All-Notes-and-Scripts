@@ -328,8 +328,6 @@ In Agile:
 * SDLC cycle is repeated frequently
 * Faster feedback and delivery
 
-(Details to be covered in project management sessions)
-
 ---
 
 ## 15. DevOps Interview-Ready Summary Answer

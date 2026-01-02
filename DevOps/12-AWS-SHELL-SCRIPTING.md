@@ -81,7 +81,7 @@ In real organizations, this data is usually pushed to **dashboards**, but for le
 A **Cron job** is a Linux scheduler that runs commands or scripts at predefined times.
 
 **Real-world analogy:**
-Scheduling a YouTube video to publish at 7 PM automatically.
+Sending an email at 7 PM automatically.
 
 ### Why Cron Is Needed
 
