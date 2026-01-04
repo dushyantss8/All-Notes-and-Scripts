@@ -249,12 +249,12 @@ public function up()
 public function up()
 {
     Schema::create('post_user', function (Blueprint $table) {
-        $table->unsignedBigInteger('user_id');
-        $table->unsignedBigInteger('post_id');
+        $table->foreignId("user_id")->index();
+        $table->foreign("user_id")->on("users")->references("id")->cascadeOnDelete();
+        $table->foreignId("post_id")->index();
+        $table->foreign("post_id")->on("posts")->references("id")->cascadeOnDelete();
 
         $table->primary(['user_id', 'post_id']);
-
-        $table->index(['user_id', 'post_id']);
     });
 }
 ```
