@@ -96,13 +96,17 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\InvoiceItem;
 use App\Enums\InvoiceStatus;
+use Doctrine\ORM\Mapping\Id;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\Table;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[Entity]
 #[Table('invoices')]
@@ -123,6 +127,15 @@ class Invoice
 
     #[Column(name: 'created_at')]
     private \DateTime $createdAt;
+
+    // #[OneToMany(targetEntity: InvoiceItem::class)]
+    #[OneToMany(targetEntity: InvoiceItem::class, mappedBy: 'invoice', cascade: ['persist', 'remove'])]
+    private Collection $items;
+
+    public function __construct()
+    {
+      $this->items = new ArrayCollection();
+    }
 
     public function getId(): int
     {
@@ -178,6 +191,25 @@ class Invoice
         $this->createdAt = $createdAt;
         return $this;
     }
+
+    /**
+     * Method getItems
+     *
+     * @return Collection<InvoiceItem>
+     */
+    public function getItems(): Collection
+    {
+        return $this->items;
+    }
+
+    public function addItem(InvoiceItem $item)
+    {
+        $item->setInvoice($this);
+
+        $this->items->add($item);
+
+        return $this;
+    }
 }
 ```
 
@@ -207,29 +239,102 @@ class Invoice
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Id;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping\Table;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\ManyToOne;
 
-#[ORM\Entity]
-#[ORM\Table(name: 'invoice_items')]
+#[Entity()]
+#[Table(name: 'invoice_items')]
 class InvoiceItem
 {
-    #[ORM\Id]
-    #[ORM\Column]
-    #[ORM\GeneratedValue]
+    #[Id]
+    #[Column, GeneratedValue]
     private int $id;
 
-    #[ORM\Column(name: 'invoice_id')]
+    #[Column(name: 'invoice_id')]
     private int $invoiceId;
 
-    #[ORM\Column]
+    #[Column]
     private string $description;
 
-    #[ORM\Column]
+    #[Column]
     private int $quantity;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[Column(name: 'unit_price', type: Types::DECIMAL, precision: 10, scale: 2)]
     private float $unitPrice;
+
+    #[ManyToOne(inversedBy: 'items')]
+    private Invoice $invoice;
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    public function getInvoiceId(): int
+    {
+        return $this->invoiceId;
+    }
+
+    public function setInvoiceId(int $invoiceId): self
+    {
+        $this->invoiceId = $invoiceId;
+        return $this;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    public function getQuantity(): int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(int $quantity): self
+    {
+        $this->quantity = $quantity;
+        return $this;
+    }
+
+    public function getUnitPrice(): float
+    {
+        return $this->unitPrice;
+    }
+
+    public function setUnitPrice(float $unitPrice): self
+    {
+        $this->unitPrice = $unitPrice;
+        return $this;
+    }
+
+    public function getInvoice(): Invoice
+    {
+        return $this->invoice;
+    }
+
+    public function setInvoice(Invoice $invoice): self
+    {
+        $this->invoice = $invoice;
+        return $this;
+    }
 }
 ```
 
@@ -291,23 +396,24 @@ public function setInvoice(Invoice $invoice): self
 ## 9. Setting Up the EntityManager
 
 ```php
+use Doctrine\ORM\ORMSetup;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Tools\Setup;
+use Doctrine\DBAL\DriverManager;
 
-$config = Setup::createAttributeMetadataConfiguration(
-    [__DIR__ . '/Entity'],
-    true
+$config = ORMSetup::createAttributeMetadataConfiguration(
+  paths: [__DIR__ . '/../src/Entity'],
+  isDevMode: true,
 );
 
-$connection = [
-    'driver' => 'pdo_mysql',
-    'host' => $_ENV['DB_HOST'],
-    'dbname' => $_ENV['DB_NAME'],
-    'user' => $_ENV['DB_USER'],
-    'password' => $_ENV['DB_PASSWORD'],
-];
+$connection = DriverManager::getConnection([
+  'host'     => $_ENV['DB_HOST'],
+  'user'     => $_ENV['DB_USER'],
+  'password' => $_ENV['DB_PASSWORD'],
+  'dbname'   => $_ENV['DB_DATABASE'],
+  'driver'   => $_ENV['DB_DRIVER'] ?? 'pdo_mysql',
+]);
 
-$entityManager = EntityManager::create($connection, $config);
+$entityManager = new EntityManager($connection, $config);
 ```
 
 ---
