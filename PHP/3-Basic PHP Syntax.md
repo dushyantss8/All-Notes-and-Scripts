@@ -1,173 +1,135 @@
-# PHP Basics: Writing, Running, and Embedding PHP Code
+# PHP Basics: Writing and Executing PHP Code
 
-## 1. Setting Up the PHP Project
+## 1. Setting Up the Project Structure
 
-### 1.1 Opening the Project Directory
+### Opening the PHP Project Folder
 
-* PHP projects served locally are typically placed inside the `htdocs` directory (for example, when using XAMPP).
-* Open the `htdocs` folder in your code editor.
-* This directory acts as the document root for the local web server.
+1. Open your code editor.
+2. Navigate to the XAMPP installation directory.
+3. Open the `htdocs` folder (default web root for XAMPP).
+4. Create and open the folder you will use for this project.
+5. Inside the folder, create a file named **`index.php`**.
 
-### 1.2 Creating a PHP File
+### Important Note About File Extensions
 
-* Create a new file named:
-
-```text
-index.php
-```
-
-**Important:**
-
-* PHP files **must** have a `.php` extension to be interpreted as PHP.
-* A `.html` file will not execute PHP code.
+* To ensure that the PHP interpreter processes your file, its extension must be **`.php`**, not `.html`.
+* PHP files can include **HTML, CSS, and JavaScript** alongside PHP code.
 
 ---
 
-## 2. PHP Syntax Fundamentals
+# 2. PHP Opening and Closing Tags
 
-### 2.1 PHP Opening and Closing Tags
-
-PHP code is interpreted only inside PHP tags:
+### Standard PHP Tags
 
 ```php
 <?php
-// PHP code here
+    // PHP code goes here
 ?>
 ```
 
-* Opening tag: `<?php`
-* Closing tag: `?>`
+### How the Parser Works
 
-### 2.2 When to Omit the Closing Tag
+* Everything **inside** the `<?php ... ?>` block is interpreted as PHP.
+* Everything **outside** is treated as plain HTML.
 
-* If a file contains **only PHP code**, the closing `?>` tag should be omitted.
-* This prevents accidental whitespace or newlines from being sent to the browser, which can cause unexpected output or header errors.
+### When to Omit the Closing Tag
 
-**Recommended:**
+* If a PHP file contains *only PHP code*, **omit the closing tag** to prevent accidental whitespace/output that could break your application.
+* Example of unintended output:
 
 ```php
 <?php
-echo "Hello World";
-```
-
-**Required (when embedding PHP in HTML):**
-
-```php
-<?php echo "Hello World"; ?>
+echo "Hello";
+// accidental text after closing tag:
+?>
+Hello
 ```
 
 ---
 
-## 3. Outputting Data in PHP
+# 3. Printing Output with `echo` and `print`
 
-### 3.1 Using `echo`
-
-`echo` is used to output data to the browser.
+## Basic Output
 
 ```php
-<?php
 echo "Hello World";
 ```
 
-Key points:
+* Output is sent to the browser.
+* PHP code is never visible in the browser since it executes server-side.
 
-* Statements end with a semicolon (`;`).
-* Missing semicolons cause parser errors.
-* PHP is a **server-side language**; PHP code is not visible in the browser’s source.
+### Syntax Elements Explained
 
-### 3.2 Running PHP from the Browser
+* String values are enclosed in `'single'` or `"double"` quotes.
+* Statements end with a **semicolon (`;`)**.
+* Missing semicolons result in parser errors.
 
-* Visit:
+## When Semicolons Are Not Required
 
-```text
-http://localhost/index.php
+* If a PHP tag closes immediately after an expression:
+
+```php
+<?php echo "Hello" ?>
 ```
-
-* The browser displays only the output, not the PHP source code.
 
 ---
 
-## 4. Running PHP from the Command Line
+# 4. Running PHP in the Terminal
 
-### 4.1 Opening the Shell
+### Using XAMPP Shell
 
-* Open the XAMPP Control Panel.
-* Click **Shell** to open the terminal.
-
-### 4.2 Executing a PHP Script
-
-Navigate to the project directory:
+1. Open **XAMPP Control Panel**.
+2. Click **Shell**.
+3. Navigate to your project directory:
 
 ```bash
-cd htdocs
+cd htdocs/project-folder
 ```
 
-Run the PHP file:
+4. Execute a PHP script:
 
 ```bash
 php index.php
 ```
 
-Output:
-
-```text
-Hello World
-```
-
 ---
 
-## 5. `echo` vs `print`
+# 5. Differences Between `echo` and `print`
 
-### 5.1 Differences Between `echo` and `print`
+### Key Differences
 
-| Feature             | echo                  | print           |
-| ------------------- | --------------------- | --------------- |
-| Return value        | None                  | Returns `1`     |
-| Used in expressions | ❌                     | ✅               |
-| Performance         | Slightly faster       | Slightly slower |
-| Multiple arguments  | Yes (comma-separated) | No              |
+| Feature                | echo                  | print           |
+| ---------------------- | --------------------- | --------------- |
+| Return value           | None                  | Returns `1`     |
+| Use inside expressions | No                    | Yes             |
+| Multiple arguments     | Yes (comma separated) | No              |
+| Performance            | Slightly faster       | Slightly slower |
 
-### 5.2 Example: `print` Return Value
+### Examples
 
-```php
-<?php
-echo print "Hello World";
-```
-
-Output:
-
-```text
-Hello World1
-```
-
-### 5.3 Multiple Arguments with `echo`
+**`print` returning 1**
 
 ```php
-<?php
+echo print("Hello"); // prints "Hello1"
+```
+
+**Comma-separated arguments with echo**
+
+```php
 echo "Hello", " ", "World";
 ```
 
 ---
 
-## 6. Working with Strings
+# 6. Handling Quotes in Strings
 
-### 6.1 Escaping Quotes
-
-Invalid string:
-
-```php
-echo 'Joe's invoice'; // Syntax error
-```
-
-Valid approaches:
-
-**Escape the quote**
+### Escaping Quotes
 
 ```php
 echo 'Joe\'s invoice';
 ```
 
-**Use double quotes**
+### Using Double Quotes Instead
 
 ```php
 echo "Joe's invoice";
@@ -175,182 +137,150 @@ echo "Joe's invoice";
 
 ---
 
-## 7. Variables in PHP
+# 7. Variables in PHP
 
-### 7.1 Declaring Variables
+### Declaring Variables
 
-* Variables start with a `$` symbol.
+* Variables must start with `$`:
 
 ```php
-<?php
-$name = "John Doe";
-echo $name;
+$name = "Peter";
 ```
 
-### 7.2 Variable Naming Rules
+### Naming Rules
 
-* Must start with a **letter** or **underscore**
-* Cannot start with a number
-* Cannot contain special characters
-* `$this` is reserved and cannot be reassigned
+* Must start with a **letter** or **underscore**.
+* Cannot start with a number.
+* Cannot contain special characters.
+* Cannot use reserved name `$this`.
 
-Valid:
-
-```php
-$_user1 = "Admin";
-```
-
-Invalid:
+### Variables Are Assigned by Value (Default)
 
 ```php
-1name = "Test"; // Syntax error
-```
-
----
-
-## 8. Variable Assignment: By Value vs By Reference
-
-### 8.1 Assignment by Value (Default)
-
-```php
-<?php
 $x = 1;
 $y = $x;
 $x = 3;
-
-echo $y; // Outputs 1
+echo $y; // prints 1
 ```
 
-### 8.2 Assignment by Reference
+### Assigning by Reference
 
 ```php
-<?php
 $x = 1;
 $y = &$x;
 $x = 3;
-
-echo $y; // Outputs 3
+echo $y; // prints 3
 ```
-
-* The ampersand (`&`) makes `$y` reference `$x`.
 
 ---
 
-## 9. Strings and Variables
+# 8. Using Variables Inside Strings
 
-### 9.1 Single Quotes vs Double Quotes
-
-**Single quotes (no variable parsing):**
+### Single Quotes (Literal)
 
 ```php
-echo 'Hello $name';
+echo 'Hello $name'; // prints: Hello $name
 ```
 
-Output:
-
-```text
-Hello $name
-```
-
-**Double quotes (variable interpolation):**
+### Double Quotes (Interpolated)
 
 ```php
-echo "Hello $name";
+echo "Hello $name"; // prints: Hello Peter
 ```
 
-Output:
-
-```text
-Hello John Doe
-```
-
-### 9.2 Using Curly Braces for Clarity
+### Using Curly Braces for Clarity
 
 ```php
 echo "Hello {$name}";
 ```
 
-### 9.3 String Concatenation
+### String Concatenation
 
 ```php
 echo "Hello " . $name;
 ```
 
-* `.` is the concatenation operator.
-
 ---
 
-## 10. Embedding PHP in HTML
+# 9. Embedding PHP in HTML
 
-### 10.1 Basic Example
+### Example Structure
 
-```php
+```html
 <!DOCTYPE html>
 <html>
 <body>
-  <h1><?php echo "Hello World"; ?></h1>
+    <?php echo "Hello World"; ?>
 </body>
 </html>
 ```
 
-### 10.2 PHP Short Echo Tag
+### Shorthand Echo Syntax
 
-```php
-<h1><?= "Hello World" ?></h1>
+```html
+<?= "Hello World" ?>
 ```
 
-* Equivalent to `<?php echo ... ?>`
-* Semicolon not required for single-line output
+Equivalent to:
 
----
+```php
+<?php echo "Hello World"; ?>
+```
 
-## 11. Outputting HTML from PHP
+### Processing PHP + Outputting HTML
 
 ```php
 <?php
-echo "<p>This is a paragraph</p>";
+$x = 10;
+$y = 5;
+echo "<p>Total: " . ($x + $y) . "</p>";
+?>
 ```
-
-* PHP can generate HTML dynamically.
-* Excessive mixing of PHP and HTML is discouraged.
-* Presentation logic should be separated from business logic.
 
 ---
 
-## 12. Comments in PHP
+# 10. Comments in PHP
 
-### 12.1 Single-Line Comments
+### Single-Line Comments
 
 ```php
 // This is a comment
 # This is also a comment
 ```
 
-### 12.2 Multi-Line Comments
+### Multi-Line Comments
 
 ```php
 /*
-This is a
-multi-line comment
+  This is a
+  multi-line comment
 */
 ```
 
-### 12.3 Important Rules
+### Important Notes
 
-* Comments after the closing `?>` tag do **not** comment out HTML.
-* Nested multi-line comments are **not allowed** and cause syntax errors.
+* Comments on the same line as the closing PHP tag **do not** block following HTML.
+* Nested multi-line comments are **not allowed**:
+
+```php
+/* outer
+   /* inner */   // will cause syntax error
+*/
+```
 
 ---
 
-## 13. Documentation Comments (Overview)
+# Summary of Concepts Covered
 
-```php
-/**
- * This is a documentation block
- */
-```
+You now understand:
 
-* Used for documenting classes, methods, and properties.
-* Covered in more detail in Object-Oriented PHP.
+* How to create and run a PHP file.
+* PHP tags and when to omit closing tags.
+* Printing output using `echo` and `print`.
+* Running PHP scripts through the browser and terminal.
+* String handling and escaping characters.
+* Declaring variables and assigning by value or reference.
+* Embedding PHP inside HTML.
+* Commenting code properly.
 
 ---

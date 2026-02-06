@@ -1,109 +1,74 @@
-# PHP Data Types and Type Casting –
+# PHP Data Types and Typecasting —
 
-## 1. PHP Type System Overview
+## 1. Overview of PHP’s Type System
 
-### 1.1 Dynamic (Weak) Typing in PHP
+PHP is a **dynamically typed (weakly typed) language**, meaning:
 
-* PHP is a **dynamically typed** (also called **weakly typed**) language.
-* You do **not** need to explicitly declare a variable’s type.
-* A variable’s type can **change at runtime**.
-* Type checking happens **at runtime**, not at compile time.
+* You do **not** need to declare a variable type explicitly.
+* Variable types can **change at runtime**.
+* Type checking happens **at runtime**, unlike statically typed languages (Java, C++, C#) that validate types at compile time.
 
-### 1.2 Comparison with Statically Typed Languages
-
-* **Statically typed languages** (e.g., Java, C++, C#):
-
-  * Types are checked at compile time.
-  * Variables must have explicitly defined types.
-* PHP’s flexibility:
-
-  * Easier and faster to write code.
-  * Can lead to performance overhead and unexpected bugs if not handled carefully.
-
-### 1.3 Modern PHP Improvements
-
-* PHP now supports:
-
-  * **Type hinting**
-  * **Return types**
-  * **Strict typing**
-* These features help reduce bugs and improve code reliability.
+PHP’s flexibility can introduce performance overhead and unexpected behavior, but modern versions provide stronger type features, including **strict types** and **type hinting**.
 
 ---
 
-## 2. PHP Primitive Data Types
+## 2. Primitive Types in PHP
 
-PHP supports **10 primitive types**, grouped into categories:
+PHP supports **10 primitive types**, grouped as:
 
-### 2.1 Scalar Types (4)
+### Scalar Types (4)
 
-#### 1. Boolean
+1. **boolean** – true or false
+2. **integer** – whole numbers (e.g., 1, 0, -5)
+3. **float (double)** – decimal numbers (e.g., 1.5, -9.2, 0.005)
+4. **string** – sequence of characters wrapped in quotes
 
-* Represents truth values.
-* Possible values:
+### Compound Types (4)
 
-  ```php
-  true, false
-  ```
+1. **array**
+2. **object**
+3. **callable**
+4. **iterable**
 
-#### 2. Integer
+### Special Types (2)
 
-* Whole numbers without decimals.
+1. **resource**
+2. **null**
 
-  ```php
-  -5, 0, 1, 100
-  ```
+### Pseudotypes (2) – for readability only
 
-#### 3. Float (Double)
-
-* Numbers with decimal points.
-
-  ```php
-  1.5, 0.99, -15.8
-  ```
-
-#### 4. String
-
-* A sequence of characters enclosed in quotes.
-
-  ```php
-  "Hello", 'John Doe'
-  ```
+* mixed
+* void
 
 ---
 
-## 3. Defining and Printing Scalar Variables
+## 3. Examples of Scalar Types
 
-### 3.1 Variable Definitions
+### Example Code
 
 ```php
 $completed = true;
 $score = 75;
 $price = 0.99;
-$greeting = "Hello John Doe";
-```
+$greeting = "Hello Jon Doe";
 
-### 3.2 Output Using `echo`
-
-```php
 echo $completed . "<br>";
 echo $score . "<br>";
 echo $price . "<br>";
 echo $greeting . "<br>";
 ```
 
-### 3.3 Boolean Output Behavior
+### Output Characteristics
 
-* `true` → prints as `1`
-* `false` → prints nothing (empty output)
+* `true` prints as `1`
+* `false` prints as an empty string
+* This does not reflect the type; it is simply output formatting.
 
 ---
 
-## 4. Determining Variable Types
+## 4. Determining a Variable’s Type
 
-### 4.1 Using `gettype()`
-
-Returns the data type as a string.
+### Using `gettype()`
 
 ```php
 echo gettype($completed); // boolean
@@ -112,225 +77,183 @@ echo gettype($price);     // double
 echo gettype($greeting);  // string
 ```
 
-### 4.2 Using `var_dump()`
+### Using `var_dump()`
 
-Displays both **value** and **type**.
+Provides both type and value:
 
 ```php
 var_dump($completed); // bool(true)
 var_dump($score);     // int(75)
 var_dump($price);     // float(0.99)
-var_dump($greeting);  // string(9) "Hello John Doe"
+var_dump($greeting);  // string(9) "Hello Jon Doe"
 ```
 
 ---
 
-## 5. Compound Types Overview
+## 5. Arrays
 
-### 5.1 Arrays
+Arrays are lists of values and may contain mixed types.
 
-#### Defining an Array
-
-```php
-$companies = [1, 2, 3, 0.5, -9.2, "Apple", true];
-```
-
-#### Printing Arrays (Incorrect Way)
+### Example
 
 ```php
-echo $companies;
-// Outputs: "Array" + notice (array to string conversion)
+$companies = [1, 2, 3, 0.5, -9.2, "hello", true];
 ```
 
-#### Printing Arrays (Correct Way)
+### Printing arrays
 
-```php
-print_r($companies);
-```
-
-> Arrays can contain **mixed data types**.
-
----
-
-### 5.2 Other Compound Types (Overview Only)
-
-* Objects
-* Callables
-* Iterables
-
-These are advanced types and are covered separately.
+* `echo $array` → prints `Array` and throws a notice.
+* `print_r($array)` → prints in human-readable structure.
 
 ---
 
 ## 6. Special Types
 
-### 6.1 `null`
+### resource
 
-* Represents **no value** or **nothing**.
+Represents external resources (e.g., files, DB connections).
 
-### 6.2 `resource`
+### null
 
-* Used for external resources (files, database connections, etc.).
+Represents the absence of a value.
 
 ---
 
-## 7. How PHP Determines Variable Types
+## 7. Dynamic Type Determination
 
-PHP infers types based on **assigned values**.
+PHP analyzes the assigned value at runtime.
 
-```php
-$score = 75;
-var_dump($score); // int(75)
-```
+Example:
 
 ```php
-$score = "75";
-var_dump($score); // string(2) "75"
+$score = 75;        // integer
+$score = "75";      // string
 ```
 
-* No quotes → integer
-* Quotes → string
+Using quotes forces string interpretation.
 
 ---
 
 ## 8. Type Hinting in Functions
 
-### 8.1 Function Without Type Hinting
+You can enforce expected parameter and return types.
+
+### Basic Example
 
 ```php
 function sum($x, $y) {
     return $x + $y;
 }
 
-echo sum(2, 3); // 5
+echo sum(2, 3);   // 5
 ```
 
-### 8.2 Passing Mixed Types
-
-```php
-echo sum(2, "3"); // 5 (string coerced to integer)
-```
-
-This behavior is known as **type juggling** or **type coercion**.
-
----
-
-## 9. Function Type Hinting
-
-### 9.1 Enforcing Parameter Types
+### Using Type Hints
 
 ```php
 function sum(int $x, int $y) {
     return $x + $y;
 }
+
+echo sum(2, "3");  // outputs 5 (PHP converts "3" → 3)
 ```
+
+PHP attempts to **coerce** types automatically; this behavior is known as **type juggling** or **type coercion**.
+
+#### Example of coercion
+
+* Passing `"3"` to `int` → converted to `3`
+* Passing `2.5` to `int` → converted to `2`
+
+If conversion is not possible:
 
 ```php
-echo sum(2, "3"); // Still works (string converted to int)
+function demo(array $x) {}
+demo("hello"); // Fatal error
 ```
 
-* PHP attempts to **coerce** values into the expected type.
+### Type Guarantee Scope
 
-### 9.2 When Conversion Fails
+Type hints guarantee types **only inside the function before reassignment**:
 
 ```php
-sum(2, []);
+function test(int $x) {
+    $x = 5.5; // valid: now $x is float
+}
 ```
-
-* Results in a **fatal error** (array cannot be converted to int).
 
 ---
 
-## 10. Variable Type Mutability
+## 10. Enabling Strict Types
 
-* Type guarantees only apply **up to that point**.
-* Variables can still be reassigned:
+Strict mode prevents type coercion.
 
-```php
-$x = 5;
-$x = 5.5; // Valid, type changes to float
-```
-
----
-
-## 11. Strict Types in PHP
-
-### 11.1 Enabling Strict Mode
+### Syntax (must be the first line of the file):
 
 ```php
 declare(strict_types=1);
 ```
 
-* Must be declared at the **top of the file**.
-* Disables automatic type coercion.
-
-### 11.2 Strict Mode Example
+### Effect of Strict Mode
 
 ```php
-declare(strict_types=1);
-
 function sum(int $x, int $y) {
     return $x + $y;
 }
 
-sum(2, "3"); // Fatal error
+sum(2, "3");   // Fatal error in strict mode
 ```
 
-### 11.3 Exception Rule
+### Exception in strict mode
 
-* **Integers can be passed where floats are expected**, even in strict mode.
+Passing integers to float parameters is allowed:
 
 ```php
-function sum(float $x, float $y) {
-    return $x + $y;
+function calc(float $a, float $b) {
+    return $a + $b;
 }
 
-sum(2, 3); // Valid
+calc(2, 3);   // Valid even in strict mode
 ```
 
 ---
 
-## 12. Best Practices: Type Hinting and Strict Types
+## 11. Typecasting (Manual Type Conversion)
 
-* Improves code quality
-* Prevents unexpected bugs
-* Makes function contracts explicit
-* Strongly recommended for modern PHP applications
+You can explicitly convert (cast) variables.
 
----
-
-## 13. Type Casting in PHP
-
-### 13.1 Explicit Type Casting
-
-You can manually convert a value to a specific type.
+### Example
 
 ```php
 $x = "5";
-var_dump($x); // string(1) "5"
-```
+var_dump($x);          // string(1) "5"
 
-### 13.2 Casting to Integer
-
-```php
 $x = (int) $x;
-var_dump($x); // int(5)
+var_dump($x);          // int(5)
 ```
 
-### 13.3 Common Casts
+### Supported cast types
 
-```php
-(int), (float), (string), (bool), (array), (object)
-```
+* (int), (integer)
+* (bool), (boolean)
+* (float), (double), (real)
+* (string)
+* (array)
+* (object)
+* (unset) → null
 
 ---
 
-## 14. Summary
+## Summary
 
-* PHP uses **dynamic typing** by default.
-* Supports **scalar**, **compound**, and **special** data types.
-* Provides tools like `gettype()` and `var_dump()` for debugging.
-* Type hinting and `strict_types` offer better safety and predictability.
-* Explicit type casting gives full control over data types.
+* PHP’s dynamic typing system
+* Primitive, compound, special, and pseudo types
+* Techniques for inspecting variable types
+* Arrays and their output functions
+* Type hinting and type coercion
+* Enabling strict typing
+* Explicit typecasting
 
-This foundation is critical for writing **clean, predictable, and maintainable PHP code**, especially when building large applications or frameworks.
+These concepts form the foundation for writing reliable, type-aware PHP applications and will be expanded further in specialized lessons for each type category.
+
+---
