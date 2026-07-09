@@ -21,6 +21,8 @@ AWS follows a **service-based model**:
 
 AWS is not just "servers in the cloud." It is a collection of managed building blocks for compute, networking, storage, security, monitoring, deployment, and governance. DevOps engineers use these services to automate infrastructure, deploy applications reliably, and keep systems secure and observable.
 
+AWS is not just "servers in the cloud". It is a collection of managed building blocks for compute, networking, storage, security, monitoring, deployment, and governance. DevOps engineers use these services to automate infrastructure, deploy applications reliably and keep systems secure and observable.
+
 ### Service Model Breakdown
 
 | Model | AWS Example | DevOps Responsibility |
